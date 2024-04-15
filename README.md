@@ -19,7 +19,7 @@ Unnecessary files and directories are removed from AppDir.
 A compressed sb-module is created using the mksquashfs utility.
 How to work with the script:
 
-Copy the script to a file, for example, create_sbmodule.sh.
-Make the file executable: chmod +x create_sbmodule.sh.
-Run the script with the name of the deb package as an argument: ./create_sbmodule.sh package_name
+Copy the script to a file, for example, repo2sb.sh.
+Make the file executable: chmod +x repo2sb.sh.
+Run the script with the name of the deb package as an argument: ./repo2sb.sh package_name
 After the script finishes running, an sb-module will be created in the ~/portapps directory.
