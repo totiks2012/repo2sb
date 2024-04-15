@@ -1,4 +1,5 @@
 # repo2sb
+Modules created with this Bash script can work with the Module Manager whose code can be viewed and downloaded at the following address: https://github.com/totiks2012/Simple-module-manager-for-Linux..git 
 This is a bash script for creating sb-modules from deb packages in Debian-based systems. An sb-module is a packaging format used in the Sandbox environment to isolate applications from the system.
 
 Description of how the script works:
