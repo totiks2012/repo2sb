@@ -5,7 +5,9 @@ This is a bash script for creating sb-modules from deb packages in Debian-based 
 upd -26-04-24 :
 improved the script and added a check to see if the ~/portapps/$1 directory is empty.
    now take the script named repo2sb-2
-if the directory is empty, the script will start copying resources for a portable program into it, if there are files in the directory, the script will continue its work bypassing copying, this will exclude the creation of duplicate directories, for example, with the name /usr/bin_1
+if the directory is empty, the script will start copying resources for a portable program into it, if there are files in the directory, 
+the script will continue its work bypassing copying, 
+this will exclude the creation of duplicate directories, for example, with the name /usr/bin_1
 Description of how the script works:
 
 The ~/apptool directory is created and we move into it.
