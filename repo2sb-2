@@ -1,0 +1,78 @@
+
+#!/usr/bin/env bash
+#set -x
+mkdir -p ~/apptool
+cd ~/apptool
+# Проверка наличия инструментов
+#if [ ! -f appimagetool ]; then
+  #wget -q https://github.com/AppImage/AppImageKit/releases/download/continuous/appimagetool-x86_64.AppImage -O appimagetool
+  #chmod a+x appimagetool
+#fi
+
+if [ ! -f pkg2appimage ]; then
+  wget -q https://raw.githubusercontent.com/ivan-hc/AM-application-manager/main/tools/pkg2appimage 
+  chmod a+x pkg2appimage
+fi
+# Установка необходимых зависимостей
+sudo apt install imagemagick binutils
+
+# Создание временной директории
+mkdir -p tmp
+cd tmp
+
+# Создание файла рецепта
+echo "app: $1
+ingredients:" > recipe.yml
+
+cat >> recipe.yml <<EOF
+  dist: debian
+  arch: $(arch)
+  sources:
+    - deb http://deb.debian.org/debian/ stable main contrib non-free  
+    - deb http://deb.debian.org/debian/ stable-updates main contrib non-free
+    - deb http://security.debian.org/debian-security stable/updates main contrib non-free
+  packages:  
+    - $1  
+EOF
+
+# Скачивание пакетов и сборка APPDIR
+~/apptool/pkg2appimage ./recipe.yml   
+
+# Копируем каталог с ресурсами в ~/portapps
+echo "Копируем каталог с ресурсами в ~/portapps "
+mkdir -p ~/portapps/$1.AppDir
+#cp -r ./$1/$1.AppDir ~/portapps/
+echo "Проверка, пуст ли каталог ~/portapps/$1.AppDir"
+if [ -z "$(ls -A ~/portapps/$1.AppDir)" ]; then
+    echo "Каталог ~/portapps/$1.AppDir пуст. Копирование файлов..."
+    cp -r ./$1/$1.AppDir ~/portapps/
+else
+    echo "Каталог ~/portapps/$1.AppDir уже содержит файлы."
+    read -p "Нажмите любую клавишу для продолжения..." ex
+fi
+cd ~/portapps/$1.AppDir
+# Имя файла из десктоп-файла
+requested_filename=$(grep -m 1 -o '^Icon=.*' *.desktop | cut -d '=' -f 2-)
+echo "$requested_filename"
+# Переименовываем app.png
+#cd ~/portapps/$1.AppDir
+image="$(find /usr/share/icons/gnome/48x48/apps/ -name "$requested_filename.png")"
+# Добавляем изображение app.png в ~/portapps/$1.AppDir
+cp "$image" ~/portapps/$1.AppDir/
+
+# Сборка AppImage
+#ARCH=$(arch) ~/apptool/appimagetool -n ~/portapps/$1.AppDir
+
+cd ~/apptool
+rm -rf ./tmp
+cd ~/portapps/$1.AppDir
+rm ./AppRun
+rm ./*desktop
+for locale in $(ls ~/portapps/$1.AppDir/usr/share/locale/ | grep -Ev "en|ru"); do
+    rm -rf ~/portapps/$1.AppDir/usr/share/locale/$locale
+done
+rm -rf ~/portapps/$1.AppDir/usr/share/man/*
+rm -rf ~/portapps/$1.AppDir/usr/share/help/*
+
+cd ..
+mksquashfs ./"$1.AppDir" ./"$1.AppDir".sb -comp gzip -b 256K -Xcompression-level 9
