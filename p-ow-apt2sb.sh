@@ -23,7 +23,6 @@ mkdir -p "$app_dir"
 url_file="$(mktemp)"
 
 # Скачивание deb-пакетов и зависимостей
-#pt-get install --download-only --print-uris $package_name | grep -o 'http://\S*\.deb' > "$url_file"
 apt-get install --download-only --print-uris $package_name | grep -o 'https\?://\S*\.deb' > "$url_file"
 
 # Скачивание файлов из списка
