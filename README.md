@@ -2,11 +2,13 @@
 Modules created with this Bash script can work with the Module Manager whose code can be viewed and downloaded at the following address: https://github.com/totiks2012/Simple-module-manager-for-Linux..git 
 
 This is a bash script for creating sb-modules from deb packages in Debian-based systems. An sb-module is a packaging format used in the Sandbox environment to isolate applications from the system.
-      upd -10-08-24 :
+                       
+                       upd -10-08-24 :
 in the script p-ow-apt2sb.sh the code is completely changed to create a module and track the dependencies of the selected package using apt-get and squashfs-tool, to select a package the script uses peco, a fuzzy search utility, so it’s worth taking care of installing peco from here https: //github.com/peco/peco
 
 how to use, run the script p-ow-apt2sb.sh in the linux terminal, search for peco
  the name of the package you are looking for in the repository, move the keyboard cursor arrows over the selected package and press enter, the script will then do everything itself, in the ~/modules directory we will find the module of the selected package
+     
       upd -26-04-24 :
 improved the script and added a check to see if the ~/portapps/$1 directory is empty.
    now take the script named repo2sb-2
